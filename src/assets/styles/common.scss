@@ -1,0 +1,19 @@
+.header{
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  .logo{
+    display: flex;
+    align-items: center;
+    img{
+      height: 30px;
+    }
+  }
+  .user{
+    color: #333333;
+    font-size: 16px;
+    padding-top: 10px;
+    line-height: 30px;
+  }
+}
