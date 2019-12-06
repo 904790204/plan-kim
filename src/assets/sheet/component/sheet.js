@@ -564,6 +564,7 @@ function sheetInitEvents() {
       }
     }).on('mousewheel.stop', (evt) => {
       overlayerMousescroll.call(this, evt);
+      evt.preventDefault()
     });
 
   // slide on mobile

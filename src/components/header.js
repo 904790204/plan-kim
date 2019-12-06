@@ -8,8 +8,7 @@ class header extends React.Component {
               <img alt="logo" src={require('../assets/img/logo.png')} />
             </div>
             <div className="user">
-                <span>kim</span>
-                <span>退出</span>
+                <span>你好，kim</span>
             </div>
           </div>
   }

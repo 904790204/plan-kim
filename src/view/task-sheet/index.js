@@ -1,18 +1,18 @@
 import React from 'react'
 import Spreadsheet from "../../assets/sheet/index"
 import 'x-data-spreadsheet/dist/xspreadsheet.css'
-import defaultData from './defaultData'
+import {defaultData,defaultConf} from './default'
 
 class TaskSheet extends React.Component {
   constructor() {
     super()
     this.proxyData(this, methods)
     this.Sheet = null
-    this.sheetList = defaultData
+    let storageData = localStorage.getItem('sheetData')
+    this.sheetList = storageData ? JSON.parse(storageData) : defaultData
   }
   render() {
     return <div className="task-sheet">
-              <button onClick={this.getData.bind(this)}>获取数据</button>
               <div id="Spreadsheet"></div>
            </div>
   }
@@ -25,12 +25,13 @@ const methods = {
   // 表格初始化
   spreadSheetInit(){
     // Spreadsheet.locale('zh-cn', zhCN)
-    this.Sheet = new Spreadsheet("#Spreadsheet")
+    this.Sheet = new Spreadsheet("#Spreadsheet",defaultConf)
       .loadData(this.sheetList)
       .change(this.sheetChange)
   },
   // 数据变化
   sheetChange(data){
+    localStorage.setItem('sheetData',JSON.stringify(data))
     console.log(data)
   },
   // 获取数据
