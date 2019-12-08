@@ -38,6 +38,11 @@ class Spreadsheet {
     this.data.change = cb;
     return this;
   }
+  selected(cb) {
+    console.log('选中');
+    this.data.selected = cb;
+    return this;
+  }
 
   static locale(lang, message) {
     locale(lang, message);

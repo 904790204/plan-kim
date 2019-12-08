@@ -140,40 +140,42 @@ function overlayerMousescroll(evt) {
   const { rows, cols } = data;
 
   // deltaY for vertical delta
-  let { deltaY } = evt;
+  let { deltaX, deltaY } = evt;
+  
   // console.log('deltaX', deltaX, 'evt.detail', evt.detail);
-  if (evt.detail) deltaY = evt.detail * 40;
-  if (deltaY > 0) {
-    // up
-    const ri = data.scroll.ri + 1;
-    if (ri < rows.len) {
-      verticalScrollbar.move({ top: top + rows.getHeight(ri) - 1 });
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    if (deltaX > 0) {
+      // left
+      const ci = data.scroll.ci + 1;
+      if (ci < cols.len) {
+        horizontalScrollbar.move({ left: left + cols.getWidth(ci) - 1 });
+      }
+    } else {
+      // right
+      const ci = data.scroll.ci - 1;
+      if (ci >= 0) {
+        horizontalScrollbar.move({
+          left: ci === 0 ? 0 : left - cols.getWidth(ci),
+        });
+      }
     }
   } else {
-    // down
-    const ri = data.scroll.ri - 1;
-    if (ri >= 0) {
-      verticalScrollbar.move({ top: ri === 0 ? 0 : top - rows.getHeight(ri) });
+    if (evt.detail) deltaY = evt.detail * 40;
+    if (deltaY > 0) {
+      // up
+      const ri = data.scroll.ri + 1;
+      if (ri < rows.len) {
+        verticalScrollbar.move({ top: top + rows.getHeight(ri) - 1 });
+      }
+    } else {
+      // down
+      const ri = data.scroll.ri - 1;
+      if (ri >= 0) {
+        verticalScrollbar.move({ top: ri === 0 ? 0 : top - rows.getHeight(ri) });
+      }
     }
   }
 
-  // deltaX for Mac horizontal scroll
-  const { deltaX } = evt;
-  if (deltaX > 0) {
-    // left
-    const ci = data.scroll.ci + 1;
-    if (ci < cols.len) {
-      horizontalScrollbar.move({ left: left + cols.getWidth(ci) - 1 });
-    }
-  } else {
-    // right
-    const ci = data.scroll.ci - 1;
-    if (ci >= 0) {
-      horizontalScrollbar.move({
-        left: ci === 0 ? 0 : left - cols.getWidth(ci),
-      });
-    }
-  }
 }
 
 function overlayerTouch(direction, distance) {
@@ -296,6 +298,8 @@ function overlayerMousedown(evt) {
   let { ri, ci } = cellRect;
   // sort or filter
   const { autoFilter } = data;
+  console.log('点击');
+  this.data.selected(selector)
   if (autoFilter.includes(ri, ci)) {
     if (left + width - 20 < offsetX && top + height - 20 < offsetY) {
       const items = autoFilter.items(ci, (r, c) => data.rows.getCell(r, c));

@@ -152,6 +152,6 @@ export let defaultConf = {
       size: 10,
       bold: false,
       italic: false,
-    },
+    }
   },
 }
