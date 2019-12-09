@@ -38,9 +38,9 @@ class Spreadsheet {
     this.data.change = cb;
     return this;
   }
-  selected(cb) {
+  click(cb) {
     console.log('选中');
-    this.data.selected = cb;
+    this.data.click = cb;
     return this;
   }
 

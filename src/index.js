@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/styles/index.scss';
 import App from './App';
+import './assets/js/axios'
 import * as serviceWorker from './serviceWorker';
+import 'antd/dist/antd.css'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

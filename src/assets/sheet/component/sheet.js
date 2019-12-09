@@ -298,8 +298,6 @@ function overlayerMousedown(evt) {
   let { ri, ci } = cellRect;
   // sort or filter
   const { autoFilter } = data;
-  console.log('点击');
-  this.data.selected(selector)
   if (autoFilter.includes(ri, ci)) {
     if (left + width - 20 < offsetX && top + height - 20 < offsetY) {
       const items = autoFilter.items(ci, (r, c) => data.rows.getCell(r, c));
@@ -544,6 +542,7 @@ function sheetInitEvents() {
     toolbar,
     modalValidation,
     sortFilter,
+    selector
   } = this;
   // overlayer
   overlayerEl
@@ -568,6 +567,7 @@ function sheetInitEvents() {
       }
     }).on('mousewheel.stop', (evt) => {
       overlayerMousescroll.call(this, evt);
+      console.log('滑动');
       evt.preventDefault()
     });
 
@@ -636,6 +636,10 @@ function sheetInitEvents() {
 
   bind(window, 'click', (evt) => {
     this.focusing = overlayerEl.contains(evt.target);
+    // 修改
+    if(this.focusing){
+      this.data.click(selector)
+    }
   });
 
   // for selector

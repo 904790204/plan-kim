@@ -1,25 +1,31 @@
 import React from 'react'
 import Spreadsheet from "../../assets/sheet/index"
 import 'x-data-spreadsheet/dist/xspreadsheet.css'
+import '../../assets/styles/sheet.scss'
 import {defaultData,defaultConf} from './default'
+import { message, Button } from 'antd';
+// import '../../mock'
+// import $axios from '../../assets/js/axios'
 
 class TaskSheet extends React.Component {
   constructor() {
     super()
     this.proxyData(this, methods)
-    let storageData = localStorage.getItem('sheetData')
     this.state = {
       Sheet: null,
-      sheetList: storageData ? Object.assign({},defaultData,JSON.parse(storageData)) : defaultData
+      sheetList: ''
     }
   }
   render() {
     return <div className="task-sheet">
               <div id="Spreadsheet"></div>
+              <div className="task-sheet-btn">
+                <Button type="primary" size="small" onClick={this.saveOnlineData.bind(this)}>保存</Button>
+              </div>
            </div>
   }
   componentDidMount() {
-    this.spreadSheetInit()
+    this.getOnlineData()
   }
 }
 
@@ -29,10 +35,12 @@ const methods = {
     this.state.Sheet = new Spreadsheet("#Spreadsheet",defaultConf)
       .loadData(this.state.sheetList)
       .change(this.sheetChange.bind(this))
-      .selected(this.sheetSelected.bind(this))
+      .click(this.sheetClick.bind(this))
   },
   // 数据变化
   sheetChange(data){
+    console.log(data)
+    this.state.sheetList = data
     this.stachData(data)
   },
   // 获取数据
@@ -40,9 +48,9 @@ const methods = {
     console.log(this.state.Sheet.getData())
   },
   // 自加事件选中
-  sheetSelected(d){
+  sheetClick(d){
     console.log(d);
-    
+    console.log(this.getSelectedRange());
   },
   // 暂存表格
   stachData(data){
@@ -53,6 +61,40 @@ const methods = {
       }
     }
     localStorage.setItem('sheetData',JSON.stringify(obj))
+  },
+  // 获取选中范围
+  getSelectedRange(){
+    return this.state.Sheet.data.selector.range
+  },
+  // 保存数据
+  saveOnlineData(){
+    let params = {
+      data: this.state.sheetList
+    }
+    this.$axios.post('sheet/saveSheetData',params)
+    .then(res=>{
+      message.success(res.data);
+    })
+    .catch(err=>{
+      message.error(err.data);
+    })
+  },
+  getOnlineData(){
+    this.$axios.post('sheet/getSheetData')
+    .then(res=>{
+      let storageData = localStorage.getItem('sheetData')
+      let list = this.state.sheetList
+      if(res.data){
+        list = Object.assign({},defaultData,JSON.parse(res.data))
+      }else if(storageData){
+        // list = Object.assign({},defaultData,JSON.parse(storageData))
+      }
+      this.state.sheetList = list
+      this.spreadSheetInit()
+    })
+    .catch(err=>{
+      message.error(err.data);
+    })
   }
 }
 export default TaskSheet
