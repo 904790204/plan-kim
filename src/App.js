@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Login from './view/login'
 import Header from './components/header'
-import TaskSheet from './view/task-sheet/index'
+import TaskSheet from './view/task-sheet'
 
 React.Component.prototype.proxyData = (target,data) => {
   Object.keys(data).forEach(key=>{
@@ -15,13 +16,15 @@ React.Component.prototype.proxyData = (target,data) => {
     })
   })
 }
-
 function App() {
   return (
     <div className="App">
-      <Header />
       <Router>
-        <Route path="/task-sheet" component={TaskSheet}></Route>
+        <Route path="/login" component={Login}></Route>
+        <Route path="/task">
+          <Header />
+          <Route path="/task/sheet" component={TaskSheet}></Route>
+        </Route>
       </Router>
     </div>
   );

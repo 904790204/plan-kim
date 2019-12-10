@@ -20,20 +20,20 @@ class TaskSheet extends React.Component {
     return <div className="task-sheet">
               <div id="Spreadsheet"></div>
               <div className="task-sheet-btn">
+                {/* <Button type="primary" size="small" onClick={this.getOnlineData.bind(this)}>刷新</Button> */}
                 <Button type="primary" size="small" onClick={this.saveOnlineData.bind(this)}>保存</Button>
               </div>
            </div>
   }
   componentDidMount() {
     this.getOnlineData()
+    this.spreadSheetInit()
   }
 }
-
 const methods = {
   // 表格初始化
   spreadSheetInit(){
     this.state.Sheet = new Spreadsheet("#Spreadsheet",defaultConf)
-      .loadData(this.state.sheetList)
       .change(this.sheetChange.bind(this))
       .click(this.sheetClick.bind(this))
   },
@@ -79,6 +79,7 @@ const methods = {
       message.error(err.data);
     })
   },
+  // 获取线上数据
   getOnlineData(){
     this.$axios.post('sheet/getSheetData')
     .then(res=>{
@@ -90,7 +91,7 @@ const methods = {
         // list = Object.assign({},defaultData,JSON.parse(storageData))
       }
       this.state.sheetList = list
-      this.spreadSheetInit()
+      this.state.Sheet.loadData(this.state.sheetList)
     })
     .catch(err=>{
       message.error(err.data);

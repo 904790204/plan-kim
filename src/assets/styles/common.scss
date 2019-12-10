@@ -15,5 +15,26 @@
     font-size: 16px;
     padding-top: 10px;
     line-height: 30px;
+    span{
+      font-size: 12px;
+      margin-left: 10px;
+      &.logout{
+        cursor: pointer;
+        &:hover{
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+.Bv6_layer {
+  .layer_login_register_v2{
+    padding: 10px 0;
+  }
+  .form_login_register .input_wrap{
+    width: 100%;
+  }
+  .form_login_register .item_btn .btn_34px{
+    width: 100%;
   }
 }
