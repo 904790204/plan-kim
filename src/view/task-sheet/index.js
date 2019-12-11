@@ -4,7 +4,7 @@ import 'x-data-spreadsheet/dist/xspreadsheet.css'
 import '../../assets/styles/sheet.scss'
 import {defaultData,defaultConf} from './default'
 import { message, Button } from 'antd';
-// import '../../mock'
+import '../../mock'
 // import $axios from '../../assets/js/axios'
 
 class TaskSheet extends React.Component {

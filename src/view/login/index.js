@@ -1,4 +1,5 @@
 import React from 'react'
+import '../../mock'
 
 class Login extends React.Component{
   constructor(){
@@ -10,10 +11,12 @@ class Login extends React.Component{
         loginSuccessUrl: encodeURIComponent(window.location.protocol + '//' + window.location.host)
       }
     }
-    this.loginLayerInsert()
   }
   render(){
     return <div className="login"></div>
+  }
+  componentWillMount(){
+    this.checkLogin()
   }
   componentWillUnmount(){
     this.loginLayerRemove()
@@ -29,9 +32,21 @@ const methods = {
     }
   },
   loginLayerRemove(){
-    this.state.loginLayer.parentNode.removeChild(this.state.loginLayer)
-    this.state.loginLayer = null
-    window.WBtopGlobal_loginLayer = null
+    if(this.state.loginLayer){
+      this.state.loginLayer.parentNode.removeChild(this.state.loginLayer)
+      this.state.loginLayer = null
+      window.WBtopGlobal_loginLayer = null
+    }
+  },
+  checkLogin(){
+    this.$axios.post('user/login')
+    .then(res=>{
+      if(res.code === 0){
+        this.props.history.push('/task/sheet')
+      }else{
+        this.loginLayerInsert()
+      }
+    })
   }
 }
 

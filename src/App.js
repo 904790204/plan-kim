@@ -22,7 +22,7 @@ function App() {
       <Router>
         <Route path="/login" component={Login}></Route>
         <Route path="/task">
-          <Header />
+          <Route component={Header}></Route>
           <Route path="/task/sheet" component={TaskSheet}></Route>
         </Route>
       </Router>

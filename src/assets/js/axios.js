@@ -25,7 +25,10 @@ axios.interceptors.response.use(
     }
   },
   err => {
-    if (err.response.status === 504 || err.response.status === 404) {
+    console.log(err);
+    if(!err.response){
+      console.log("系统错误");
+    } else if (err.response.status === 504 || err.response.status === 404) {
       console.log("服务器被吃了⊙﹏⊙∥");
     } else if (err.response.status === 401) {
       console.log("登录信息失效⊙﹏⊙∥");
