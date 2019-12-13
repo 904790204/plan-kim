@@ -1,6 +1,6 @@
 import React from 'react'
 import Spreadsheet from "../../assets/sheet/index"
-import 'x-data-spreadsheet/dist/xspreadsheet.css'
+import '../../assets/sheet/index.css'
 import '../../assets/styles/sheet.scss'
 import {defaultData,defaultConf} from './default'
 import { message, Button } from 'antd';
@@ -28,6 +28,8 @@ class TaskSheet extends React.Component {
   componentDidMount() {
     this.getOnlineData()
     this.spreadSheetInit()
+    console.log(this.state.Sheet);
+    
   }
 }
 const methods = {

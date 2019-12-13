@@ -4,7 +4,7 @@ import DataProxy from './core/data_proxy';
 import Sheet from './component/sheet';
 import { cssPrefix } from './config';
 import { locale } from './locale/locale';
-import './index.less';
+// import './index.css';
 
 class Spreadsheet {
   constructor(selectors, options = {}) {

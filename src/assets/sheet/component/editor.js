@@ -1,6 +1,7 @@
 //* global window */
 import { h } from './element';
 import Suggest from './suggest';
+import Search from './search';
 import Datepicker from './datepicker';
 import { cssPrefix } from '../config';
 // import { mouseMoveUp } from '../event';
@@ -31,8 +32,9 @@ function resetTextareaSize() {
 
 function inputEventHandler(evt) {
   const v = evt.target.value;
-  // console.log(evt, 'v:', v);
-  const { suggest, textlineEl, validator } = this;
+  
+  const { suggest, textlineEl, validator, search } = this;
+  search.searchConf(search, v);
   const cell = this.cell;
   if(cell !== null){
     if(("editable" in cell && Boolean(cell.editable) === true) || (cell['editable'] === undefined)) {
@@ -121,6 +123,19 @@ function suggestItemClick(it) {
   }
   setText.call(this, this.inputText, position);
 }
+// 修改
+function searchItemClick(it) {
+  let index = this.inputText.lastIndexOf(';')
+  let inputText = it.name + ';'
+  if(index > -1){
+    this.inputText = this.inputText.slice(0, index + 1)
+  }else{
+    this.inputText = ''
+  }
+  this.inputText += inputText
+  let position = this.inputText.length
+  setText.call(this, this.inputText, position);
+}
 
 function resetSuggestItems() {
   this.suggest.setItems(this.formulas);
@@ -142,6 +157,10 @@ export default class Editor {
     this.suggest = new Suggest(formulas, (it) => {
       suggestItemClick.call(this, it);
     });
+    // 修改
+    this.search = new Search(formulas, (it) => {
+      searchItemClick.call(this, it);
+    })
     this.datepicker = new Datepicker();
     this.datepicker.change((d) => {
       // console.log('d:', d);
@@ -155,12 +174,14 @@ export default class Editor {
         this.textlineEl = h('div', 'textline'),
         this.suggest.el,
         this.datepicker.el,
+        this.search.el
       )
       .on('mousemove.stop', () => {})
       .on('mousedown.stop', () => {});
     this.el = h('div', `${cssPrefix}-editor`)
       .child(this.areaEl).hide();
     this.suggest.bindInputEvents(this.textEl);
+    this.search.bindInputEvents(this.textEl);
 
     this.areaOffset = null;
     this.freeze = { w: 0, h: 0 };
@@ -229,7 +250,6 @@ export default class Editor {
     this.cell = cell;
     const text = (cell && cell.text) || '';
     this.setText(text);
-
     this.validator = validator;
     if (validator) {
       const { type } = validator;
@@ -245,7 +265,11 @@ export default class Editor {
       }
     }
   }
-
+  // 修改
+  setSearch(cell, search) {
+    // console.log('::', validator);
+    this.search.searchConf = search
+  }
   setText(text) {
     this.inputText = text;
     // console.log('text>>:', text);

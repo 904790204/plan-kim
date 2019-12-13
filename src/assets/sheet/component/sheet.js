@@ -360,6 +360,8 @@ function editorSet() {
   const { editor, data } = this;
   editorSetOffset.call(this);
   editor.setCell(data.getSelectedCell(), data.getSelectedValidator());
+  editor.setSearch(data.getSelectedCell(), data.search);
+  // 修改
   clearClipboard.call(this);
 }
 

@@ -105,7 +105,23 @@ let data = {
   cols: {
     len: 26
   },
-  validations: [],
+  validator: {
+    text:'Kim',
+    type:'list',
+    values:function(){
+      console.log(this);
+      
+      return ['itt','dawd']
+    }
+  },
+  search: (search,t)=>{
+    console.log(t);
+    search.setItems([
+      {name:'金大光',position:'FE'},
+      {name:'李大刀',position:'RD'},
+      {name:'王大力',position:'PM'}
+    ])
+  },
   autofilter: function() {
     console.log(this);
   }
@@ -113,7 +129,10 @@ let data = {
 heads.forEach((item, index) =>{
   data.rows['0'].cells[index] = {
     text: item.text,
-    style: 0
+    style: 0,
+    validator: [{
+      text:'Kim'
+    }]
   }
   data.cols[index] = {
     width: item.width
@@ -139,6 +158,10 @@ export let defaultConf = {
     indexWidth: 60,
     minWidth: 60,
   },
+  validator: [{
+    text:'Kim',
+    type:'list'
+  }],
   style: {
     bgcolor: '#ffffff',
     align: 'left',

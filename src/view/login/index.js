@@ -15,7 +15,7 @@ class Login extends React.Component{
   render(){
     return <div className="login"></div>
   }
-  componentWillMount(){
+  componentDidMount(){
     this.checkLogin()
   }
   componentWillUnmount(){

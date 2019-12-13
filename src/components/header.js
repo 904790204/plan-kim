@@ -1,6 +1,6 @@
 import React from 'react'
 import '../assets/styles/common.scss'
-import { message } from 'antd'
+import { message, Menu, Dropdown, Icon } from 'antd'
 import '../mock'
 
 class header extends React.Component {
@@ -21,22 +21,32 @@ class header extends React.Component {
               this.state.userId !== ''
               ?
               <div className="user">
-                <span>你好，{this.state.userName}</span>
-                <span className="logout" onClick={this.logout}>退出</span>
+                <Dropdown 
+                  overlay={
+                    <Menu>
+                      <Menu.Item onClick={this.logout}>退出</Menu.Item>
+                    </Menu>
+                }>
+                  <span>
+                  {this.state.userName} <Icon type="down" />
+                  </span>
+                </Dropdown>
+                <span className="portrait"><img alt="portrait" src={this.state.portraitUrl} /></span>
               </div>
               :
               null
             }
           </div>
   }
-  componentWillMount(){
+  componentDidMount(){
     this.checkLogin()
   }
   // 退出
   logout = () => {
     this.$axios.post('user/logout')
     .then(res=>{
-      message.success(res.data);
+      message.success(res.data)
+      this.props.history.push('/login')
     })
     .catch(err=>{
       message.error(err.data);
