@@ -13,7 +13,8 @@ class TaskSheet extends React.Component {
     this.proxyData(this, methods)
     this.state = {
       Sheet: null,
-      sheetList: ''
+      sheetList: '',
+      selector: ''
     }
   }
   render() {
@@ -26,8 +27,8 @@ class TaskSheet extends React.Component {
            </div>
   }
   componentDidMount() {
-    this.getOnlineData()
     this.spreadSheetInit()
+    this.getOnlineData()
     console.log(this.state.Sheet);
     
   }
@@ -38,6 +39,7 @@ const methods = {
     this.state.Sheet = new Spreadsheet("#Spreadsheet",defaultConf)
       .change(this.sheetChange.bind(this))
       .click(this.sheetClick.bind(this))
+    this.setDefaultConf()
   },
   // 数据变化
   sheetChange(data){
@@ -51,6 +53,9 @@ const methods = {
   },
   // 自加事件选中
   sheetClick(d){
+    this.setState({
+      selector: d
+    })
     console.log(d);
     console.log(this.getSelectedRange());
   },
@@ -85,12 +90,14 @@ const methods = {
   getOnlineData(){
     this.$axios.post('sheet/getSheetData')
     .then(res=>{
-      let storageData = localStorage.getItem('sheetData')
-      let list = this.state.sheetList
+      // let storageData = localStorage.getItem('sheetData')
+      console.log(defaultData);
+      
+      let list = null
       if(res.data){
         list = Object.assign({},defaultData,JSON.parse(res.data))
-      }else if(storageData){
-        // list = Object.assign({},defaultData,JSON.parse(storageData))
+      }else{
+        list = defaultData
       }
       this.state.sheetList = list
       this.state.Sheet.loadData(this.state.sheetList)
@@ -98,6 +105,25 @@ const methods = {
     .catch(err=>{
       message.error(err.data);
     })
-  }
+  },
+  // 设置默认配置
+  setDefaultConf(){
+    defaultData.search = this.personSearch.bind(this)
+  },
+  // 搜索
+  personSearch(search,t){
+    let selector = this.state.selector
+    let title = selector.data.rows._[0].cells
+    let type = title[selector.indexes[1]].type
+    console.log();
+    
+    if(type === 'person'){
+      search.setItems([
+        {name:'金大光',position:'FE'},
+        {name:'李大刀',position:'RD'},
+        {name:'王大力',position:'PM'}
+      ])
+    }
+  },
 }
 export default TaskSheet

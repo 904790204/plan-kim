@@ -32,7 +32,8 @@ let heads = [
   {
     name:'pm',
     text:'负责人',
-    width: 80
+    width: 80,
+    type: 'person'
   },
   {
     name:'status',
@@ -42,17 +43,20 @@ let heads = [
   {
     name:'fe',
     text:'前端',
-    width: 140
+    width: 140,
+    type: 'person'
   },
   {
     name:'rd',
     text:'后端',
-    width: 140
+    width: 140,
+    type: 'person'
   },
   {
     name:'qa',
     text:'测试负责人',
-    width: 140
+    width: 140,
+    type: 'person'
   },
   {
     name:'longTime',
@@ -109,18 +113,8 @@ let data = {
     text:'Kim',
     type:'list',
     values:function(){
-      console.log(this);
-      
-      return ['itt','dawd']
+      return []
     }
-  },
-  search: (search,t)=>{
-    console.log(t);
-    search.setItems([
-      {name:'金大光',position:'FE'},
-      {name:'李大刀',position:'RD'},
-      {name:'王大力',position:'PM'}
-    ])
   },
   autofilter: function() {
     console.log(this);
