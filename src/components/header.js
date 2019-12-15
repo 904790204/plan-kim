@@ -1,6 +1,7 @@
 import React from 'react'
 import '../assets/styles/common.scss'
 import { message, Menu, Dropdown, Icon } from 'antd'
+import store from '../store'
 
 class header extends React.Component {
   constructor(){
@@ -10,6 +11,13 @@ class header extends React.Component {
       userName:'',
       portraitUrl:''
     }
+    this.unsub = store.subscribe(()=>{
+      this.setState({
+        userId:store.getState().user.userId,
+        userName:store.getState().user.userName,
+        portraitUrl:store.getState().user.portraitUrl
+      })
+    })
   }
   render() {
     return <div className="header">
@@ -40,6 +48,9 @@ class header extends React.Component {
   componentDidMount(){
     this.checkLogin()
   }
+  componentWillUnmount(){
+    this.unsub()
+  }
   // 退出
   logout = () => {
     this.$http.logout()
@@ -61,11 +72,7 @@ class header extends React.Component {
         });
         return
       }
-      this.setState({
-        userId:res.data.userId,
-        userName:res.data.userName,
-        portraitUrl:res.data.portraitUrl
-      })
+      store.dispatch({type:'SET_USERINFO',...res.data}) 
     })
   }
 }

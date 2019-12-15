@@ -4,6 +4,7 @@ import '../../assets/sheet/index.css'
 import '../../assets/styles/sheet.scss'
 import {defaultData,defaultConf} from './default'
 import { message, Button } from 'antd'
+import store from '../../store'
 
 class TaskSheet extends React.Component {
   constructor() {
@@ -11,10 +12,20 @@ class TaskSheet extends React.Component {
     this.state = {
       Sheet: null,
       sheetList: '',
-      selector: ''
+      selector: '',
+      num:1
     }
+    store.subscribe(()=>{
+      this.setState({
+        num:1
+      })
+    })
+  }
+  componentDidUpdate(val){
+    
   }
   render() {
+    console.log(123);
     return <div className="task-sheet">
               <div id="Spreadsheet"></div>
               <div className="task-sheet-btn">
