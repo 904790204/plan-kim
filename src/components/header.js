@@ -1,7 +1,6 @@
 import React from 'react'
 import '../assets/styles/common.scss'
 import { message, Menu, Dropdown, Icon } from 'antd'
-import '../mock'
 
 class header extends React.Component {
   constructor(){
@@ -43,7 +42,7 @@ class header extends React.Component {
   }
   // 退出
   logout = () => {
-    this.$axios.post('user/logout')
+    this.$http.logout()
     .then(res=>{
       message.success(res.data)
       this.props.history.push('/login')
@@ -52,8 +51,9 @@ class header extends React.Component {
       message.error(err.data);
     })
   }
+  // 验证登录
   checkLogin(){
-    this.$axios.post('user/login')
+    this.$http.login()
     .then(res=>{
       if(res.code === 50002){
         message.error('登录失效',()=>{

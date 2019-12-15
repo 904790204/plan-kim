@@ -3,19 +3,10 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Login from './view/login'
 import Header from './components/header'
 import TaskSheet from './view/task-sheet'
+import './assets/styles/index.scss'
+import 'antd/dist/antd.css'
+import './api'
 
-React.Component.prototype.proxyData = (target,data) => {
-  Object.keys(data).forEach(key=>{
-    Object.defineProperty(target,key,{
-      get(){
-          return data[key]
-      },
-      set(newValue){
-          data[key] = newValue
-      }
-    })
-  })
-}
 function App() {
   return (
     <div className="App">

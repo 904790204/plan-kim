@@ -3,14 +3,11 @@ import Spreadsheet from "../../assets/sheet/index"
 import '../../assets/sheet/index.css'
 import '../../assets/styles/sheet.scss'
 import {defaultData,defaultConf} from './default'
-import { message, Button } from 'antd';
-import '../../mock'
-// import $axios from '../../assets/js/axios'
+import { message, Button } from 'antd'
 
 class TaskSheet extends React.Component {
   constructor() {
     super()
-    this.proxyData(this, methods)
     this.state = {
       Sheet: null,
       sheetList: '',
@@ -29,38 +26,39 @@ class TaskSheet extends React.Component {
   componentDidMount() {
     this.spreadSheetInit()
     this.getOnlineData()
-    console.log(this.state.Sheet);
+  }
+  // 表格初始化
+  spreadSheetInit = () => {
+    this.setState({
+      Sheet: new Spreadsheet("#Spreadsheet",defaultConf)
+    },()=>{
+      this.state.Sheet.change(this.sheetChange.bind(this)).click(this.sheetClick.bind(this))
+      this.setDefaultConf()
+    })
     
   }
-}
-const methods = {
-  // 表格初始化
-  spreadSheetInit(){
-    this.state.Sheet = new Spreadsheet("#Spreadsheet",defaultConf)
-      .change(this.sheetChange.bind(this))
-      .click(this.sheetClick.bind(this))
-    this.setDefaultConf()
-  },
   // 数据变化
-  sheetChange(data){
+  sheetChange = (data) => {
     console.log(data)
-    this.state.sheetList = data
+    this.setState({
+      sheetList: data
+    })
     this.stachData(data)
-  },
+  }
   // 获取数据
-  getData(){
+  getData = () => {
     console.log(this.state.Sheet.getData())
-  },
+  }
   // 自加事件选中
-  sheetClick(d){
+  sheetClick  = (d) => {
     this.setState({
       selector: d
     })
     console.log(d);
     console.log(this.getSelectedRange());
-  },
+  }
   // 暂存表格
-  stachData(data){
+  stachData = (data) => {
     let obj = {}
     for(let key in data){
       if(key !== 'autofilter'){
@@ -68,27 +66,27 @@ const methods = {
       }
     }
     localStorage.setItem('sheetData',JSON.stringify(obj))
-  },
+  }
   // 获取选中范围
-  getSelectedRange(){
+  getSelectedRange = () => {
     return this.state.Sheet.data.selector.range
-  },
+  }
   // 保存数据
-  saveOnlineData(){
+  saveOnlineData = () => {
     let params = {
       data: this.state.sheetList
     }
-    this.$axios.post('sheet/saveSheetData',params)
+    this.$http.sheetSave(params)
     .then(res=>{
       message.success(res.data);
     })
     .catch(err=>{
       message.error(err.data);
     })
-  },
+  }
   // 获取线上数据
-  getOnlineData(){
-    this.$axios.post('sheet/getSheetData')
+  getOnlineData = () => {
+    this.$http.getSheetData()
     .then(res=>{
       // let storageData = localStorage.getItem('sheetData')
       console.log(defaultData);
@@ -99,24 +97,24 @@ const methods = {
       }else{
         list = defaultData
       }
-      this.state.sheetList = list
+      this.setState({
+        sheetList: list
+      })
       this.state.Sheet.loadData(this.state.sheetList)
     })
     .catch(err=>{
       message.error(err.data);
     })
-  },
+  }
   // 设置默认配置
-  setDefaultConf(){
+  setDefaultConf = () => {
     defaultData.search = this.personSearch.bind(this)
-  },
+  }
   // 搜索
-  personSearch(search,t){
+  personSearch = (search,t) =>{
     let selector = this.state.selector
     let title = selector.data.rows._[0].cells
     let type = title[selector.indexes[1]].type
-    console.log();
-    
     if(type === 'person'){
       search.setItems([
         {name:'金大光',position:'FE'},
@@ -124,6 +122,6 @@ const methods = {
         {name:'王大力',position:'PM'}
       ])
     }
-  },
+  }
 }
 export default TaskSheet

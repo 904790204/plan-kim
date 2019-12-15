@@ -1,6 +1,4 @@
 import axios from "axios";
-import { Component } from "react";
-import '../../mock'
 
 let base = "/";
 
@@ -68,6 +66,4 @@ let $axios = {
   get,
   all
 }
-Component.prototype.$axios = $axios
-
 export default $axios

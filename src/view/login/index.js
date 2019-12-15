@@ -1,10 +1,8 @@
 import React from 'react'
-import '../../mock'
 
 class Login extends React.Component{
   constructor(){
     super()
-    this.proxyData(this, methods)
     this.state = {
       loginLayer:null,
       param:{
@@ -21,25 +19,31 @@ class Login extends React.Component{
   componentWillUnmount(){
     this.loginLayerRemove()
   }
-}
-const methods = {
-  loginLayerInsert(){
-    this.state.loginLayer = document.createElement('script')
-    this.state.loginLayer.src = 'http://tjs.sjs.sinajs.cn/t5/register/js/page/remote/loginLayer.js'
-    document.body.appendChild(this.state.loginLayer)
-    this.state.loginLayer.onload = () => {
-      window.WBtopGlobal_loginLayer(this.state.param)
-    }
-  },
-  loginLayerRemove(){
+  // 插入登录js
+  loginLayerInsert = () => {
+    let loginLayer = document.createElement('script')
+    loginLayer.src = 'http://tjs.sjs.sinajs.cn/t5/register/js/page/remote/loginLayer.js'
+      document.body.appendChild(loginLayer)
+      loginLayer.loginLayer.onload = () => {
+        window.WBtopGlobal_loginLayer(this.state.param)
+      }
+    this.setState({
+      loginLayer: loginLayer
+    })
+  }
+  // 登录js移除
+  loginLayerRemove = () => {
     if(this.state.loginLayer){
       this.state.loginLayer.parentNode.removeChild(this.state.loginLayer)
-      this.state.loginLayer = null
       window.WBtopGlobal_loginLayer = null
+      this.setState({
+        loginLayer: null
+      })
     }
-  },
-  checkLogin(){
-    this.$axios.post('user/login')
+  }
+  // 验证登录
+  checkLogin = () => {
+    this.$http.login()
     .then(res=>{
       if(res.code === 0){
         this.props.history.push('/task/sheet')
