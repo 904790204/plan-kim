@@ -9,7 +9,7 @@ function user(state = initState,action){
       state.userName = action.userName
       state.userId = action.userId
       state.portraitUrl = action.portraitUrl
-      return state
+      return {...state}
     default:
       return state
   }

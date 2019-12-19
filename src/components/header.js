@@ -1,31 +1,16 @@
 import React from 'react'
-import '../assets/styles/common.scss'
+import { connect } from 'react-redux'
 import { message, Menu, Dropdown, Icon } from 'antd'
-import store from '../store'
+import '../assets/styles/common.scss'
 
 class header extends React.Component {
-  constructor(){
-    super()
-    this.state = {
-      userId:'',
-      userName:'',
-      portraitUrl:''
-    }
-    this.unsub = store.subscribe(()=>{
-      this.setState({
-        userId:store.getState().user.userId,
-        userName:store.getState().user.userName,
-        portraitUrl:store.getState().user.portraitUrl
-      })
-    })
-  }
   render() {
     return <div className="header">
             <div className="logo">
               <img alt="logo" src={require('../assets/img/logo.png')} />
             </div>
             {
-              this.state.userId !== ''
+              this.props.userId !== ''
               ?
               <div className="user">
                 <Dropdown 
@@ -35,10 +20,10 @@ class header extends React.Component {
                     </Menu>
                 }>
                   <span>
-                  {this.state.userName} <Icon type="down" />
+                  {this.props.userName} <Icon type="down" />
                   </span>
                 </Dropdown>
-                <span className="portrait"><img alt="portrait" src={this.state.portraitUrl} /></span>
+                <span className="portrait"><img alt="portrait" src={this.props.portraitUrl} /></span>
               </div>
               :
               null
@@ -47,9 +32,6 @@ class header extends React.Component {
   }
   componentDidMount(){
     this.checkLogin()
-  }
-  componentWillUnmount(){
-    this.unsub()
   }
   // 退出
   logout = () => {
@@ -72,8 +54,27 @@ class header extends React.Component {
         });
         return
       }
-      store.dispatch({type:'SET_USERINFO',...res.data}) 
+      this.props.setUserInfo(res.data)
     })
   }
 }
-export default header
+
+const mapStateToProps = state => {
+  return {
+    userName: state.user.userName,
+    userId: state.user.userId,
+    portraitUrl: state.user.portraitUrl
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+      setUserInfo: (data) => {
+          dispatch({type:'SET_USERINFO',...data})
+      }
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(header)
