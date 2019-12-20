@@ -18,20 +18,20 @@ class TaskSheet extends React.Component {
   render() {
     return <div className="task-sheet">
               <div id="Spreadsheet"></div>
-              <div className="task-sheet-btn">
+              <div className="task-sheet-topbtn">
                 {/* <Button type="primary" size="small" onClick={this.getOnlineData.bind(this)}>刷新</Button> */}
-                <Button type="primary" size="small" onClick={this.saveOnlineData.bind(this)}>保存</Button>
+                <Button type="primary" size="small" onClick={this.saveOnlineData}>保存</Button>
+              </div>
+              <div className="task-sheet-bottombtn">
+                <Button size="small" icon="plus" onClick={()=>this.addSheetRow(10)}>10</Button>
+                <Button size="small" icon="plus" onClick={()=>this.addSheetRow(20)}>20</Button>
+                <Button size="small" icon="plus" onClick={()=>this.addSheetRow(50)}>50</Button>
               </div>
            </div>
   }
   componentDidMount() {
     this.spreadSheetInit()
     this.getOnlineData()
-    setTimeout(()=>{
-
-    console.log(this.props.userName);
-    },1000)
-    
   }
   // 表格初始化
   spreadSheetInit = () => {
@@ -41,7 +41,6 @@ class TaskSheet extends React.Component {
       this.state.Sheet.change(this.sheetChange.bind(this)).click(this.sheetClick.bind(this))
       this.setDefaultConf()
     })
-    
   }
   // 数据变化
   sheetChange = (data) => {
@@ -95,8 +94,6 @@ class TaskSheet extends React.Component {
     this.$http.getSheetData()
     .then(res=>{
       // let storageData = localStorage.getItem('sheetData')
-      console.log(defaultData);
-      
       let list = null
       if(res.data){
         list = Object.assign({},defaultData,JSON.parse(res.data))
@@ -106,7 +103,7 @@ class TaskSheet extends React.Component {
       this.setState({
         sheetList: list
       })
-      this.state.Sheet.loadData(this.state.sheetList)
+      this.setSheetData(this.state.sheetList)
     })
     .catch(err=>{
       message.error(err.data);
@@ -128,6 +125,21 @@ class TaskSheet extends React.Component {
         {name:'王大力',position:'PM'}
       ])
     }
+  }
+  // 添加行
+  addSheetRow = (num) => {
+    let old = this.state.sheetList.rows.len
+    num = Number(old) + num
+    let list = this.state.sheetList
+    list.rows.len = num
+    this.setState({
+      sheetList: list
+    })
+    this.setSheetData(this.state.sheetList)
+  }
+  // 设置数据
+  setSheetData = (data) => {
+    this.state.Sheet.loadData(JSON.parse(JSON.stringify(data)))
   }
 }
 const mapStateToProps = state => {

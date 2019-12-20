@@ -77,7 +77,7 @@ const defaultSettings = {
   showToolbar: true,
   showContextmenu: true,
   row: {
-    len: 100,
+    len: 50,
     height: 25,
   },
   col: {

@@ -92,7 +92,7 @@ let heads = [
 
 let data = {
   name: 'sheet1',
-  freeze: 'A1',
+  freeze: 'A2',
   styles: [
     {
       align: "center",
@@ -104,29 +104,16 @@ let data = {
     '0': {
       cells: {}
     },
-    len: 100
+    len: 50
   },
   cols: {
     len: 26
-  },
-  validator: {
-    text:'Kim',
-    type:'list',
-    values:function(){
-      return []
-    }
-  },
-  autofilter: function() {
-    console.log(this);
   }
 }
 heads.forEach((item, index) =>{
   data.rows['0'].cells[index] = {
     text: item.text,
-    style: 0,
-    validator: [{
-      text:'Kim'
-    }]
+    style: 0
   }
   data.cols[index] = {
     width: item.width
@@ -143,7 +130,7 @@ export let defaultConf = {
     width: () => document.documentElement.clientWidth
   },
   row: {
-    len: 100,
+    len: 50,
     height: 25,
   },
   col: {
@@ -152,10 +139,7 @@ export let defaultConf = {
     indexWidth: 60,
     minWidth: 60,
   },
-  validator: [{
-    text:'Kim',
-    type:'list'
-  }],
+  validator: {},
   style: {
     bgcolor: '#ffffff',
     align: 'left',
@@ -171,4 +155,5 @@ export let defaultConf = {
       italic: false,
     }
   },
+  autofilter: {}
 }
